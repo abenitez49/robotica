@@ -1,4 +1,4 @@
-# 💳 Terminal IoT Inteligente de Punto de Consumo (POS) + IA Predictiva
+# Terminal IoT Inteligente de Punto de Consumo (POS) + IA Predictiva
 
 ![ESP32-S3](https://img.shields.io/badge/Hardware-ESP32--S3-E7352C?style=for-the-badge&logo=espressif&logoColor=white)
 ![Python](https://img.shields.io/badge/Backend-FastAPI_%7C_Flask-3776AB?style=for-the-badge&logo=python&logoColor=white)
