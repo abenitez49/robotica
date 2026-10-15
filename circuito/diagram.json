@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "author": "Carlos Alcaraz",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-s3-devkitc-1",
+      "id": "esp",
+      "top": 191.82,
+      "left": 100.57,
+      "attrs": {}
+    },
+    { "type": "board-mfrc522", "id": "rfid1", "top": -21.85, "left": 41.84, "attrs": {} },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 271.2,
+      "left": 213,
+      "attrs": { "volume": "0.5" }
+    },
+    { "type": "wokwi-led", "id": "led1", "top": 294, "left": 291.8, "attrs": { "color": "green" } },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 387.4,
+      "left": 287.15,
+      "rotate": 270,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 140.8,
+      "left": 216.8,
+      "attrs": { "pins": "i2c" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "rfid1:SDA", "esp:10", "gray", [ "h-76.8", "v316.8" ] ],
+    [ "rfid1:SCK", "esp:12", "purple", [ "h-67.2", "v326.4" ] ],
+    [ "rfid1:MOSI", "esp:11", "magenta", [ "h-57.6", "v38.4" ] ],
+    [ "rfid1:MISO", "esp:13", "gold", [ "h-48", "v316.8" ] ],
+    [ "rfid1:RST", "esp:4", "#8f4814", [ "h-38.4", "v144" ] ],
+    [ "rfid1:3.3V", "esp:3V3", "red", [ "h-28.8", "v307.2" ] ],
+    [ "rfid1:GND", "esp:GND.1", "black", [ "h-20", "v300" ] ],
+    [ "lcd1:SDA", "esp:8", "blue", [ "h-19.2", "v-38.2", "h-115.2", "v144" ] ],
+    [ "lcd1:SCL", "esp:9", "blue", [ "h-9.6", "v-57.3", "h-115.2", "v182.4" ] ],
+    [ "lcd1:VCC", "esp:5V", "red", [ "h-144", "v230.5" ] ],
+    [ "lcd1:GND", "esp:GND.2", "black", [ "h0" ] ],
+    [ "bz1:2", "esp:15", "orange", [ "v105.6", "h-192.4", "v-153.6" ] ],
+    [ "bz1:1", "esp:GND.3", "black", [ "v0" ] ],
+    [ "led1:A", "r1:2", "green", [ "v0" ] ],
+    [ "r1:1", "esp:14", "violet", [ "h0", "v48", "h-230.4", "v-67.2" ] ],
+    [ "led1:C", "esp:GND.4", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}

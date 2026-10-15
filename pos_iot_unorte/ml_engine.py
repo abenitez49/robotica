@@ -55,7 +55,7 @@ def obtener_analitica_ia():
     if promedio_general > 0:
         incremento_pct = int(((valor_pico - promedio_general) / promedio_general) * 100)
         alertas.append(
-            f"🔥 Hora pico detectada a las {hora_pico} hs: Se espera un incremento del {incremento_pct}% "
+            f"Hora pico detectada a las {hora_pico} hs: Se espera un incremento del {incremento_pct}% "
             f"sobre el promedio ({valor_pico} consumos/hora); asegurar inventario y personal en caja."
         )
     
@@ -64,7 +64,7 @@ def obtener_analitica_ia():
     if len(horas_ordenadas) > 1:
         segunda_hora, segundo_val = horas_ordenadas[1]
         alertas.append(
-            f"📊 Tendencia secundaria: Alta afluencia proyectada cerca de las {segunda_hora} hs ({segundo_val} compras estimadas)."
+            f"Tendencia secundaria: Alta afluencia proyectada cerca de las {segunda_hora} hs ({segundo_val} compras estimadas)."
         )
 
     return {
