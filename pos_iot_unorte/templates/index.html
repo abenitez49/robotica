@@ -155,7 +155,7 @@ async function cargarDatos() {
 
     // 4. Actualizar Tabla Administrativa
     const tbody = document.getElementById('tablaHistorial');
-    tbody.innerHTML = data.historial.map(t => `
+    tbody.innerHTML = data.historial.sort((a, b) => b.id - a.id).map(t => `
         <tr>
             <td>#${t.id}</td>
             <td>${t.timestamp}</td>

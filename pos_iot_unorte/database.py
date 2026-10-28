@@ -30,11 +30,17 @@ def init_db():
     ''')
     
     # Insertar tarjetas de prueba (2 a 4 tarjetas según documento)
+    # tarjetas_iniciales = [
+    #     ("A1B2C3D4", "Alexis Benitez", 150000),
+    #     ("E5F6G7H8", "Carlos Alcaraz", 85000),
+    #     ("I9J0K1L2", "Moisés Zárate", 45000),
+    #     ("M3N4O5P6", "Cliente Prueba (Sin Saldo)", 5000)
+    # ]
     tarjetas_iniciales = [
-        ("A1B2C3D4", "Alexis Benitez", 150000),
-        ("E5F6G7H8", "Carlos Alcaraz", 85000),
-        ("I9J0K1L2", "Moisés Zárate", 45000),
-        ("M3N4O5P6", "Cliente Prueba (Sin Saldo)", 5000)
+        ("01020304", "Moisés Zárate", 450000),      # Blue Card
+        ("11223344", "Carlos Alcaraz", 120000),     # Red Card
+        ("21222324", "Alexis Benitez", 150000),   # Green Card
+        ("31323334", "Cliente Prueba", 500000)   # Yellow Card (Saldo insuficiente)
     ]
     
     cursor.executemany('''

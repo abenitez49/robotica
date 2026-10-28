@@ -88,6 +88,12 @@ def registrar_consumo(tx: TransaccionInput):
 # Endpoint para sincronizar el Buffer Offline del ESP32-S3 en lote
 @app.post("/api/sincronizar_buffer")
 def sincronizar_buffer(lote: List[TransaccionInput]):
+    print(f"\n--- LOTE OFFLINE RECIBIDO ---")
+    print(f"Cantidad de registros: {len(lote)}")
+    for tx in lote:
+        print(f"UID: {tx.uid}, Monto: {tx.monto}, Fecha: {tx.timestamp}")
+    print("-----------------------------\n")
+    
     resultados = [registrar_consumo(tx) for tx in lote]
     return {"sincronizados": len(resultados), "detalles": resultados}
 
@@ -142,3 +148,16 @@ def home():
         <p>Verifica que la carpeta se llame exactamente <b>templates</b> y que el archivo no se haya guardado como <i>index.html.txt</i>.</p>
         """
     return HTMLResponse(content=ruta_html.read_text(encoding="utf-8"))
+
+
+@app.get("/api/marcaciones")
+def listar_marcaciones():
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM transacciones ORDER BY timestamp DESC")
+    marcaciones = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    
+    return {"total": len(marcaciones), "datos": marcaciones}
