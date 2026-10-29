@@ -13,149 +13,247 @@
             padding: 15px; border-radius: 8px; border: 4px solid #333;
             font-size: 1.3rem; font-weight: bold; letter-spacing: 2px;
         }
+        .content-section {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-primary mb-4">
-    <div class="container justify-content-center">
-        <span class="navbar-brand mb-0 h1">Terminal IoT RFID & Analítica Predictiva IA — UNINORTE</span>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand mb-0 h1" href="#">IoT UNINORTE</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarOpciones" aria-controls="navbarOpciones" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarOpciones">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="mostrarSeccion('sec-terminal', this)">Terminal / Simulador</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="mostrarSeccion('sec-ia', this)">Analítica IA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="mostrarSeccion('sec-historial', this)">Historial y Gestión</a>
+                </li>
+            </ul>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name=Admin+UN&background=0D8ABC&color=fff" alt="Avatar" width="32" height="32" class="rounded-circle me-2">
+                    <strong>Admin UNINORTE</strong>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                    <li><span class="dropdown-item-text text-muted small">Sesión activa</span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                    <li><a class="dropdown-item" href="#">Configuración del Sistema</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger disabled" href="#" tabindex="-1" aria-disabled="true">
+                        Cerrar Sesión <em>(Próximamente)</em>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </nav>
 
 <div class="container">
+    
     <!-- SECCIÓN 1: VISTA DE TERMINAL Y SIMULADOR -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-dark text-white">1. Vista de Terminal / Última Lectura en Vivo</div>
-                <div class="card-body text-center">
-                    <div class="lcd-screen mb-3" id="lcdBox">
-                        <div id="lcdLine1">ESPERANDO...</div>
-                        <div id="lcdLine2">ACERQUE TARJETA</div>
-                    </div>
-                    <p class="mb-1"><strong>Cliente:</strong> <span id="lastUser">-</span> | <strong>UID:</strong> <span id="lastUid">-</span></p>
-                    <p class="mb-0"><strong>Saldo Restante:</strong> <span id="lastBalance" class="text-success fw-bold">-</span></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Simulador rápido para pruebas sin ESP32 conectado -->
-        <div class="col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-secondary text-white">Simulador de Lectura RFID (Pruebas de API)</div>
-                <div class="card-body">
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Seleccionar Tarjeta RFID:</label>
-                            <select id="simUid" class="form-select">
-                                <option value="A1B2C3D4">A1B2C3D4 (Alexis Benitez)</option>
-                                <option value="E5F6G7H8">E5F6G7H8 (Carlos Alcaraz)</option>
-                                <option value="I9J0K1L2">I9J0K1L2 (Moisés Zárate)</option>
-                                <option value="M3N4O5P6">M3N4O5P6 (Sin Saldo)</option>
-                            </select>
+    <div id="sec-terminal" class="content-section">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-dark text-white">Última Lectura en Vivo (Terminal)</div>
+                    <div class="card-body text-center">
+                        <div class="lcd-screen mb-3" id="lcdBox">
+                            <div id="lcdLine1">ESPERANDO...</div>
+                            <div id="lcdLine2">ACERQUE TARJETA</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Monto de Consumo (Gs.):</label>
-                            <input type="number" id="simMonto" class="form-control" value="15000">
-                        </div>
+                        <p class="mb-1"><strong>Cliente:</strong> <span id="lastUser">-</span> | <strong>UID:</strong> <span id="lastUid">-</span></p>
+                        <p class="mb-0"><strong>Saldo Restante:</strong> <span id="lastBalance" class="text-success fw-bold">-</span></p>
                     </div>
-                    <button onclick="simularLectura()" class="btn btn-success w-100 mt-3">
-                        📡 Simular Acercamiento de Tarjeta (POST /api/transaccion)
-                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-secondary text-white">Simulador de Lectura RFID (Pruebas API)</div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label">Seleccionar Tarjeta RFID:</label>
+                                <select id="simUid" class="form-select">
+                                    <option value="A1B2C3D4">A1B2C3D4 (Alexis Benitez)</option>
+                                    <option value="E5F6G7H8">E5F6G7H8 (Carlos Alcaraz)</option>
+                                    <option value="I9J0K1L2">I9J0K1L2 (Moisés Zárate)</option>
+                                    <option value="M3N4O5P6">M3N4O5P6 (Sin Saldo)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Monto de Consumo (Gs.):</label>
+                                <input type="number" id="simMonto" class="form-control" value="15000">
+                            </div>
+                        </div>
+                        <button onclick="simularLectura()" class="btn btn-success w-100 mt-3">
+                            📡 Simular Acercamiento (POST /api/transaccion)
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 3: MÓDULO DE ANALÍTICA E INTELIGENCIA ARTIFICIAL -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">2. Módulo de Inteligencia Artificial (Analítica Predictiva)</div>
-        <div class="card-body">
-            <div id="alertasIA" class="mb-3"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h6 class="text-center">Curva Histórica de Demanda Horaria (Promedio)</h6>
-                    <canvas id="chartHistorico"></canvas>
-                </div>
-                <div class="col-md-6">
-                    <h6 class="text-center">Predicción de Demanda IA (Próxima Jornada - Random Forest)</h6>
-                    <canvas id="chartPrediccion"></canvas>
+    <!-- SECCIÓN 2: MÓDULO DE IA -->
+    <div id="sec-ia" class="content-section d-none">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">Analítica Predictiva (IA)</div>
+            <div class="card-body">
+                <div id="alertasIA" class="mb-3"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-center">Curva Histórica de Demanda Horaria (Promedio)</h6>
+                        <canvas id="chartHistorico"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-center">Predicción de Demanda IA (Próxima Jornada)</h6>
+                        <canvas id="chartPrediccion"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN 2: VISTA DE GESTIÓN ADMINISTRATIVA -->
-    <div class="card shadow-sm mb-5">
-        <div class="card-header bg-dark text-white">3. Vista de Gestión Administrativa (Historial en Tiempo Real)</div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Fecha y Hora (NTP)</th>
-                            <th>UID Tarjeta</th>
-                            <th>Usuario</th>
-                            <th>Categoría</th>
-                            <th>Monto (Gs.)</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaHistorial"></tbody>
-                </table>
+    <!-- SECCIÓN 3: HISTORIAL PAGINADO -->
+    <div id="sec-historial" class="content-section d-none">
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-dark text-white">Historial en Tiempo Real</div>
+            <div class="card-body">
+                
+                <!-- Controles de Paginación Superior -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <label class="me-2">Mostrar</label>
+                        <select id="selectPaginacion" class="form-select form-select-sm d-inline-block w-auto" onchange="cambiarLimite(this.value)">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="all">Todos</option>
+                        </select>
+                        <label class="ms-2">registros</label>
+                    </div>
+                    <div id="paginacionInfo" class="text-muted small fw-bold"></div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover border">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha y Hora (NTP)</th>
+                                <th>UID Tarjeta</th>
+                                <th>Usuario</th>
+                                <th>Categoría</th>
+                                <th>Monto (Gs.)</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaHistorial"></tbody>
+                    </table>
+                </div>
+
+                <!-- Botones de Paginación Inferior -->
+                <nav aria-label="Navegación de tabla" class="mt-3">
+                    <ul class="pagination justify-content-end mb-0" id="paginacionControles">
+                        <!-- Generado por JS -->
+                    </ul>
+                </nav>
+
             </div>
         </div>
     </div>
+
 </div>
 
+<!-- SCRIPT DE INTERFAZ -->
+<script>
+    function mostrarSeccion(idSeccion, elementoClickeado) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.add('d-none'));
+        document.getElementById(idSeccion).classList.remove('d-none');
+        document.querySelectorAll('.nav-link').forEach(e => e.classList.remove('active'));
+        elementoClickeado.classList.add('active');
+
+        if(idSeccion === 'sec-ia') {
+            if(chartHist) chartHist.update();
+            if(chartPred) chartPred.update();
+        }
+    }
+</script>
+
+<!-- SCRIPT DE DATOS Y PAGINACIÓN -->
 <script>
 let chartHist = null;
 let chartPred = null;
 
-async function cargarDatos() {
-    const res = await fetch('/api/dashboard_data');
-    const data = await res.json();
+// Variables globales para la paginación
+let datosHistorialGlobal = [];
+let paginaActual = 1;
+let limiteRegistros = 10;
 
-    // 1. Actualizar Vista de Terminal
-    if (data.ultima_transaccion) {
-        const u = data.ultima_transaccion;
-        document.getElementById('lcdLine1').innerText = u.estado === 'APROBADO' ? 'Consumo Aprobado' : 'Acceso Denegado';
-        document.getElementById('lcdLine2').innerText = u.estado === 'APROBADO' ? `Gs. ${u.monto.toLocaleString()}` : u.estado;
-        document.getElementById('lastUser').innerText = u.nombre || 'Desconocido';
-        document.getElementById('lastUid').innerText = u.uid;
-        document.getElementById('lastBalance').innerText = u.saldo !== null ? `Gs. ${u.saldo.toLocaleString()}` : '-';
-    }
+// Funciones de Paginación
+function cambiarLimite(valor) {
+    limiteRegistros = valor === 'all' ? 'all' : parseInt(valor);
+    paginaActual = 1; // Resetea a la página 1 al cambiar el límite
+    renderizarTabla();
+}
 
-    // 2. Actualizar Alertas de IA
-    const alertasDiv = document.getElementById('alertasIA');
-    alertasDiv.innerHTML = data.ia.alertas.map(a => `<div class="alert alert-warning mb-2"><strong>🤖 IA Operativa:</strong> ${a}</div>`).join('');
+function cambiarPagina(delta) {
+    paginaActual += delta;
+    renderizarTabla();
+}
 
-    // 3. Actualizar Gráficos Chart.js
-    const labelsHist = Object.keys(data.ia.curva_horaria);
-    const valuesHist = Object.values(data.ia.curva_horaria);
-    const labelsPred = Object.keys(data.ia.predicciones_manana);
-    const valuesPred = Object.values(data.ia.predicciones_manana);
-
-    if (!chartHist) {
-        chartHist = new Chart(document.getElementById('chartHistorico'), {
-            type: 'bar',
-            data: { labels: labelsHist, datasets: [{ label: 'Compras Promedio / Hora', data: valuesHist, backgroundColor: '#0d6efd' }] }
-        });
-        chartPred = new Chart(document.getElementById('chartPrediccion'), {
-            type: 'line',
-            data: { labels: labelsPred, datasets: [{ label: 'Demanda Proyectada (IA)', data: valuesPred, borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.2)', fill: true, tension: 0.3 }] }
-        });
-    } else {
-        chartHist.data.datasets[0].data = valuesHist;
-        chartHist.update();
-        chartPred.data.datasets[0].data = valuesPred;
-        chartPred.update();
-    }
-
-    // 4. Actualizar Tabla Administrativa
+function renderizarTabla() {
     const tbody = document.getElementById('tablaHistorial');
-    tbody.innerHTML = data.historial.sort((a, b) => b.id - a.id).map(t => `
+    if (!datosHistorialGlobal || datosHistorialGlobal.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No hay registros aún</td></tr>';
+        document.getElementById('paginacionInfo').innerText = '';
+        document.getElementById('paginacionControles').innerHTML = '';
+        return;
+    }
+
+    // Ordenar de más nuevo a más viejo
+    const datosOrdenados = [...datosHistorialGlobal].sort((a, b) => b.id - a.id);
+    const totalRegistros = datosOrdenados.length;
+    
+    let registrosMostrados;
+    let totalPaginas = 1;
+
+    if (limiteRegistros === 'all') {
+        registrosMostrados = datosOrdenados;
+        document.getElementById('paginacionInfo').innerText = `Mostrando todos los ${totalRegistros} registros`;
+    } else {
+        totalPaginas = Math.ceil(totalRegistros / limiteRegistros);
+        if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+        if (paginaActual < 1) paginaActual = 1;
+
+        const inicio = (paginaActual - 1) * limiteRegistros;
+        const fin = inicio + limiteRegistros;
+        registrosMostrados = datosOrdenados.slice(inicio, fin);
+        
+        const mostradosFin = Math.min(fin, totalRegistros);
+        document.getElementById('paginacionInfo').innerText = `Mostrando ${inicio + 1} a ${mostradosFin} de ${totalRegistros} registros`;
+    }
+
+    // Dibujar la tabla
+    tbody.innerHTML = registrosMostrados.map(t => `
         <tr>
             <td>#${t.id}</td>
             <td>${t.timestamp}</td>
@@ -166,22 +264,90 @@ async function cargarDatos() {
             <td><span class="badge ${t.estado === 'APROBADO' ? 'bg-success' : 'bg-danger'}">${t.estado}</span></td>
         </tr>
     `).join('');
+
+    // Dibujar botones Anterior/Siguiente
+    const controles = document.getElementById('paginacionControles');
+    if (limiteRegistros === 'all' || totalPaginas <= 1) {
+        controles.innerHTML = ''; // Ocultar si cabe todo en 1 página
+    } else {
+        controles.innerHTML = `
+            <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}">
+                <button class="page-link" onclick="cambiarPagina(-1)">Anterior</button>
+            </li>
+            <li class="page-item disabled"><span class="page-link bg-light text-dark">Pág ${paginaActual} de ${totalPaginas}</span></li>
+            <li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}">
+                <button class="page-link" onclick="cambiarPagina(1)">Siguiente</button>
+            </li>
+        `;
+    }
+}
+
+async function cargarDatos() {
+    try {
+        const res = await fetch('/api/dashboard_data');
+        const data = await res.json();
+
+        // 1. Terminal
+        if (data.ultima_transaccion) {
+            const u = data.ultima_transaccion;
+            document.getElementById('lcdLine1').innerText = u.estado === 'APROBADO' ? 'Consumo Aprobado' : 'Acceso Denegado';
+            document.getElementById('lcdLine2').innerText = u.estado === 'APROBADO' ? `Gs. ${u.monto.toLocaleString()}` : u.estado;
+            document.getElementById('lastUser').innerText = u.nombre || 'Desconocido';
+            document.getElementById('lastUid').innerText = u.uid;
+            document.getElementById('lastBalance').innerText = u.saldo !== null ? `Gs. ${u.saldo.toLocaleString()}` : '-';
+        }
+
+        // 2. IA Alertas
+        if (data.ia && data.ia.alertas) {
+            document.getElementById('alertasIA').innerHTML = data.ia.alertas.map(a => `<div class="alert alert-warning mb-2"><strong>🤖 IA Operativa:</strong> ${a}</div>`).join('');
+        }
+
+        // 3. IA Gráficos
+        if (data.ia && data.ia.curva_horaria && data.ia.predicciones_manana) {
+            const labelsHist = Object.keys(data.ia.curva_horaria);
+            const valuesHist = Object.values(data.ia.curva_horaria);
+            const labelsPred = Object.keys(data.ia.predicciones_manana);
+            const valuesPred = Object.values(data.ia.predicciones_manana);
+
+            if (!chartHist) {
+                chartHist = new Chart(document.getElementById('chartHistorico'), { type: 'bar', data: { labels: labelsHist, datasets: [{ label: 'Compras / Hora', data: valuesHist, backgroundColor: '#0d6efd' }] } });
+                chartPred = new Chart(document.getElementById('chartPrediccion'), { type: 'line', data: { labels: labelsPred, datasets: [{ label: 'Demanda Proyectada', data: valuesPred, borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.2)', fill: true, tension: 0.3 }] } });
+            } else {
+                chartHist.data.datasets[0].data = valuesHist; chartHist.update();
+                chartPred.data.datasets[0].data = valuesPred; chartPred.update();
+            }
+        }
+
+        // 4. Historial (Delegado a la función de Paginación)
+        if (data.historial) {
+            datosHistorialGlobal = data.historial;
+            renderizarTabla();
+        }
+    } catch(error) {
+        console.error("Esperando conexión a la API...");
+    }
 }
 
 async function simularLectura() {
     const uid = document.getElementById('simUid').value;
     const monto = parseInt(document.getElementById('simMonto').value);
-    await fetch('/api/transaccion', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ uid, monto, categoria: "Comedor Universitario" })
-    });
-    cargarDatos();
+    try {
+        await fetch('/api/transaccion', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ uid, monto, categoria: "Comedor Universitario" })
+        });
+        cargarDatos();
+    } catch(error) {
+        alert("Error: Asegúrate de que el backend de Python/ESP32 esté corriendo.");
+    }
 }
 
-// Actualizar en vivo cada 3 segundos
+// Iniciar actualizaciones automáticas
 cargarDatos();
 setInterval(cargarDatos, 3000);
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
